@@ -1,12 +1,12 @@
 import express from 'express';
-import { handleBuildCorpus } from '../q1.js';
-import { handleBqml } from '../q2.js';
-import { handlePromote } from '../q3.js';
+import { handleBuildCorpus } from './q1.js';
+import { handleBqml } from './q2.js';
+import { handlePromote } from './q3.js';
 
 const app = express();
 app.use(express.json());
 
-// Helper adapter to bridge Express req/res with Web Request/Response
+// Adapter function to bridge Express req/res with Web Request/Response
 async function adapt(handler, req, res) {
   try {
     const webRequest = new Request(`https://${req.headers.host}${req.url}`, {
@@ -24,9 +24,10 @@ async function adapt(handler, req, res) {
   }
 }
 
-// Routes
 app.post('/build-corpus', (req, res) => adapt(handleBuildCorpus, req, res));
 app.post('/bqml', (req, res) => adapt(handleBqml, req, res));
 app.post('/promote', (req, res) => adapt(handlePromote, req, res));
+
+app.use((req, res) => res.status(404).send('Not Found'));
 
 export default app;
