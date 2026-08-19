@@ -540,7 +540,7 @@ async function handleEvaluatePhase(body) {
   const decision = (sortedReasonCodes.length === 0) ? "admit" : "reject";
 
   // Critical Slice Pass Logic
-  const criticalSlicePass = !(
+  const criticalSlicePass = Array.isArray(rows) && rows.length > 0 && !(
     sortedReasonCodes.includes("INVALID_INPUT") ||
     sortedReasonCodes.includes("INVALID_LINEAGE") ||
     sortedReasonCodes.includes("INVALID_TEST_ROW") ||
